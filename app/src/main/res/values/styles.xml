@@ -15,4 +15,9 @@
 -->
 <resources>
     <style name="MaterialTheme" parent="android:Theme.Material.Light.NoActionBar.Fullscreen" />
+    <style name="MainTheme" parent="Theme.AppCompat">
+        <item name="colorPrimary">#FF9800</item>
+        <item name="colorPrimaryDark">#EF6C00</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
 </resources>
