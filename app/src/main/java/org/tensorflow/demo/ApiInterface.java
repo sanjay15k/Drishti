@@ -1,8 +1,11 @@
 package org.tensorflow.demo;
 
 import com.google.gson.JsonObject;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -11,7 +14,7 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    @GET("api.php")
-    Call<JsonObject> getDetails(@Query("action") String query,@Query("list") String list,@Query("srsearch") String search,@Query("utf8") String utf,@Query("format") String format);
+    @GET("{value}")
+    Call<ResponseBody> getDetails(@Path("value") String objectToSearch);
 
 }

@@ -230,6 +230,7 @@ class TensorFlowImageListener implements OnImageAvailableListener {
                 if (results.get(0).getTitle().equals(CameraActivity.getObjectToSearch())){
                   CameraConnectionFragment.objectFound();
                 }
+                CameraConnectionFragment.prevObj = TensorFlowImageListener.getResults().get(0).getTitle();
                 computing = false;
               }
             });

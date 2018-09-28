@@ -83,9 +83,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -95,7 +98,7 @@ public class CameraConnectionFragment extends Fragment {
 
   private Context context;
   private static TextToSpeech textToSpeech;
-  private String textFromHtml;
+  private String description;
   private boolean isRunning = true;
   private RelativeLayout mainLayout;
 
@@ -371,11 +374,13 @@ public class CameraConnectionFragment extends Fragment {
 
   }
 
+  static String prevObj = null;
+
   public static void objectFound(){
 
     final Activity activity = (Activity) CameraActivity.getAppContext();
 
-    if (activity != null) {
+    if (activity != null && !(TensorFlowImageListener.getResults().get(0).getTitle().equals(prevObj))) {
       activity.runOnUiThread(
               new Runnable() {
                 @Override
@@ -384,6 +389,8 @@ public class CameraConnectionFragment extends Fragment {
                   assert v != null;
                   textToSpeech.speak("Object Found!", TextToSpeech.QUEUE_FLUSH, null);
                   v.vibrate(1500);
+                  System.out.println("Title is : "+TensorFlowImageListener.getResults().get(0).getTitle());
+                  System.out.println("PrevObject is : "+prevObj);
                 }
               });
     }
@@ -402,21 +409,16 @@ public class CameraConnectionFragment extends Fragment {
     @Override
     protected Void doInBackground(Void... voids) {
       Retrofit retrofit = new Retrofit.Builder()
-              .baseUrl("https://en.wikipedia.org/w/")
+              .baseUrl("http://drishti.grubx.in/objects/")
               .addConverterFactory(GsonConverterFactory.create())
               .build();
 
       ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-      Call<JsonObject> getOffersList = apiInterface.getDetails("query","search",title,"","json");
+      Call<ResponseBody> getOffersList = apiInterface.getDetails(title);
 
-      JsonObject detailsList = null;
       try {
-        detailsList = getOffersList.execute().body();
-
-        textFromHtml = Jsoup.parse(detailsList.getAsJsonObject("query").getAsJsonArray("search").get(0).getAsJsonObject().get("snippet").getAsString()).text();
-        System.out.println("DetailsList is : "+ textFromHtml );
-
+         description= Objects.requireNonNull(getOffersList.execute().body()).string();
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -425,7 +427,7 @@ public class CameraConnectionFragment extends Fragment {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-      textToSpeech.speak(textFromHtml, TextToSpeech.QUEUE_FLUSH, null);
+      textToSpeech.speak(description, TextToSpeech.QUEUE_FLUSH, null);
     }
   }
 
@@ -433,6 +435,7 @@ public class CameraConnectionFragment extends Fragment {
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
+      textToSpeech.stop();
       new MyTask().execute();
       return true;
     }
