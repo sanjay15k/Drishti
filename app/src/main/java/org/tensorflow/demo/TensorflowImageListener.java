@@ -226,10 +226,10 @@ class TensorFlowImageListener implements OnImageAvailableListener {
                 scoreView.setResults(results);
                 boundingView.setResults(results);
 
-                if (results.get(0).getTitle().equals("Screen")){
+                System.out.println("Object to search is : "+CameraActivity.getObjectToSearch());
+                if (results.get(0).getTitle().equals(CameraActivity.getObjectToSearch())){
                   CameraConnectionFragment.objectFound();
                 }
-
                 computing = false;
               }
             });

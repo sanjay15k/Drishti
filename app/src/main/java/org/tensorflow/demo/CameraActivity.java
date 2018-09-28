@@ -23,24 +23,38 @@ package org.tensorflow.demo;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class CameraActivity extends Activity {
+import org.tensorflow.tensorflowdemo.MainActivity;
+
+import java.util.ArrayList;
+import java.util.Locale;
+
+public class CameraActivity extends Activity{
   private static final int PERMISSIONS_REQUEST = 1;
 
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
   private static final String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
   private static Context context;
+  private TextToSpeech textToSpeech;
+  private static String objectToSearch ;
 
   public static Context getAppContext() {
     return CameraActivity.context;
   }
 
+  public static String getObjectToSearch() {
+    return objectToSearch;
+  }
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -48,6 +62,9 @@ public class CameraActivity extends Activity {
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     setContentView(R.layout.activity_camera);
+
+    Intent intent = getIntent();
+    objectToSearch = intent.getStringExtra("objectName");
 
     CameraActivity.context = this;
 
@@ -99,4 +116,5 @@ public class CameraActivity extends Activity {
             .replace(R.id.container, CameraConnectionFragment.newInstance())
             .commit();
   }
+
 }

@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private CardView findObjectCardView;
     private TextToSpeech textToSpeech;
+    private boolean isIntro = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,12 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
         if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, 10);
+            if (isIntro){
+                startActivityForResult(intent, 10);
+            }
+            else{
+                startActivityForResult(intent, 11);
+            }
         } else {
             Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
         }
@@ -73,8 +79,14 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "This Language is not supported");
             } else {
-                textToSpeech.speak("Welcome to Drishti, Speak One for finding an object", TextToSpeech.QUEUE_FLUSH, null);
-                getSpeechInput();
+                if (isIntro){
+                    textToSpeech.speak("Welcome to Drishti, Speak One for finding an object", TextToSpeech.QUEUE_FLUSH, null);
+                    getSpeechInput();
+                }
+                else{
+                    System.out.println("Here isIntro is false!");
+                    getSpeechInput();
+                }
             }
 
         } else {
@@ -87,21 +99,38 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        System.out.println("ResultCOde is :"+requestCode);
+
         switch (requestCode) {
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                    System.out.println(result.get(0));
+                    System.out.println("Mine Value is "+result.get(0));
 
                     if (result.get(0).equals("1")){
-                        Intent intent = new Intent(MainActivity.this, CameraActivity.class);
-                        startActivity(intent);
+                        System.out.println("I m one");
+                        textToSpeech.speak("What object you are searching for?", TextToSpeech.QUEUE_FLUSH, null);
+                        isIntro = false;
+                        getSpeechInput();
                     }
                     else{
                         textToSpeech.speak("Invalid Option Chosen, Try Again", TextToSpeech.QUEUE_FLUSH, null);
                         getSpeechInput();
                     }
+                }
+                break;
+            case 11:
+                if (resultCode == RESULT_OK && data != null) {
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+                    System.out.println("Value is :"+result);
+
+                    String objectName = result.get(0);
+                    System.out.println("ObjectName is : "+objectName);
+                    Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                    intent.putExtra("objectName",objectName);
+                    startActivity(intent);
                 }
                 break;
         }
