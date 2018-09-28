@@ -22,6 +22,7 @@ package org.tensorflow.demo;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,12 +35,21 @@ public class CameraActivity extends Activity {
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
   private static final String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+  private static Context context;
+
+  public static Context getAppContext() {
+    return CameraActivity.context;
+  }
+
+
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     setContentView(R.layout.activity_camera);
+
+    CameraActivity.context = this;
 
     if (hasPermission()) {
       if (null == savedInstanceState) {

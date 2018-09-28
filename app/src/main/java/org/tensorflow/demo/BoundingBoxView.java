@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 
 import org.tensorflow.demo.Classifier.Recognition;
-import org.tensorflow.demo.TensorFlowImageListener;
 
 import java.util.List;
 

@@ -30,8 +30,11 @@ import android.media.Image;
 import android.media.Image.Plane;
 import android.media.ImageReader;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Trace;
+import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 
 import junit.framework.Assert;
@@ -66,7 +69,7 @@ class TensorFlowImageListener implements OnImageAvailableListener {
 
   private static final String MODEL_FILE = "file:///android_asset/android_graph.pb";
   private static final String LABEL_FILE =
-      "file:///android_asset/label_strings.txt";
+          "file:///android_asset/label_strings.txt";
 
   private Integer sensorOrientation;
 
@@ -89,15 +92,15 @@ class TensorFlowImageListener implements OnImageAvailableListener {
   static List<Classifier.Recognition> results;
 
   public void initialize(
-      final AssetManager assetManager,
-      final RecognitionScoreView scoreView,
-      final BoundingBoxView boundingView,
-      final Handler handler,
-      final Integer sensorOrientation) {
+          final AssetManager assetManager,
+          final RecognitionScoreView scoreView,
+          final BoundingBoxView boundingView,
+          final Handler handler,
+          final Integer sensorOrientation) {
     Assert.assertNotNull(sensorOrientation);
     tensorflow.initializeTensorFlow(
-        assetManager, MODEL_FILE, LABEL_FILE, NUM_CLASSES, INPUT_SIZE, IMAGE_MEAN, IMAGE_STD,
-        INPUT_NAME, OUTPUT_NAME);
+            assetManager, MODEL_FILE, LABEL_FILE, NUM_CLASSES, INPUT_SIZE, IMAGE_MEAN, IMAGE_STD,
+            INPUT_NAME, OUTPUT_NAME);
     this.scoreView = scoreView;
     this.boundingView = boundingView;
     this.handler = handler;
@@ -179,16 +182,16 @@ class TensorFlowImageListener implements OnImageAvailableListener {
       final int uvRowStride = planes[1].getRowStride();
       final int uvPixelStride = planes[1].getPixelStride();
       ImageUtils.convertYUV420ToARGB8888(
-          yuvBytes[0],
-          yuvBytes[1],
-          yuvBytes[2],
-          rgbBytes,
-          previewWidth,
-          previewHeight,
-          yRowStride,
-          uvRowStride,
-          uvPixelStride,
-          false);
+              yuvBytes[0],
+              yuvBytes[1],
+              yuvBytes[2],
+              rgbBytes,
+              previewWidth,
+              previewHeight,
+              yRowStride,
+              uvRowStride,
+              uvPixelStride,
+              false);
 
       image.close();
     } catch (final Exception e) {
@@ -209,23 +212,27 @@ class TensorFlowImageListener implements OnImageAvailableListener {
     }
 
     handler.post(
-        new Runnable() {
-          @Override
-          public void run() {
-            results = tensorflow.recognizeImage(croppedBitmap);
+            new Runnable() {
+              @Override
+              public void run() {
+                results = tensorflow.recognizeImage(croppedBitmap);
 
-            System.out.println("Resul Sanjadgsajhdg*****  "+results);
+                System.out.println("Resul Sanjadgsajhdg*****  "+results);
 
-            LOGGER.v("%d results", results.size());
-            for (final Classifier.Recognition result : results) {
-              LOGGER.v("Result: " + result.getTitle());
-            }
-            scoreView.setResults(results);
-            boundingView.setResults(results);
+                LOGGER.v("%d results", results.size());
+                for (final Classifier.Recognition result : results) {
+                  LOGGER.v("Result: " + result.getTitle());
+                }
+                scoreView.setResults(results);
+                boundingView.setResults(results);
 
-            computing = false;
-          }
-        });
+                if (results.get(0).getTitle().equals("Screen")){
+                  CameraConnectionFragment.objectFound();
+                }
+
+                computing = false;
+              }
+            });
 
     Trace.endSection();
   }

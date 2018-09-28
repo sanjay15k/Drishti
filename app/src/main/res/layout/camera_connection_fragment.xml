@@ -27,7 +27,7 @@
     <org.tensorflow.demo.BoundingBoxView
         android:id="@+id/bounding"
         android:layout_width="wrap_content"
-        android:layout_height="485dp"
+        android:layout_height="532dp"
         android:layout_alignParentBottom="true" />
 
     <!--<ImageButton-->
@@ -44,13 +44,5 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentTop="true" />
-
-    <Button
-        android:id="@+id/speak"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/results"
-        android:text="Speak" />
         
 </RelativeLayout>
