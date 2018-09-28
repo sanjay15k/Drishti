@@ -48,9 +48,11 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         if (intent.resolveActivity(getPackageManager()) != null) {
             if (isIntro){
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Choose an option");
                 startActivityForResult(intent, 10);
             }
             else{
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Choose an object to search");
                 startActivityForResult(intent, 11);
             }
         } else {
