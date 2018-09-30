@@ -19,13 +19,15 @@ We use this Neural Network based classifier which helps to choose the right dire
 
 <img src="https://user-images.githubusercontent.com/35829879/46232671-8ab93a00-c38d-11e8-9070-1184c6042e86.jpeg" width="290"> <img src="https://user-images.githubusercontent.com/35829879/46232691-99075600-c38d-11e8-834b-1003ec615b77.jpeg" width="290"> <img src="https://user-images.githubusercontent.com/35829879/46232704-9f95cd80-c38d-11e8-968b-9d975e120318.jpeg" width="290"> 
 
-## Challenges I ran into
-
 ## Accomplishments that I'm proud of
 80% accuracy in path prediction
 Simple clean and user-friendly UI for the blind
-## What I learned
-Google Cloud Vision API
 
 ## What's next for Drishti - A virtual AI assistant for the blind
 A smarter android integration, with an activity that spans not just an app. A full-fledged Siri style assistant.
+
+## Contributors
+1. <a href="https://github.com/sanjay-kd">Sanjay Kumar </a> (Android App Dev.)
+2. <a href="">Yash Aggarwal </a> (Android App Dev.)
+3. <a href="https://github.com/devanshbatra04">Devansh Batra </a> (AI + Cloud)
+4. <a href="">Avinash </a> (Machine Learning)
