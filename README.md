@@ -28,6 +28,6 @@ A smarter android integration, with an activity that spans not just an app. A fu
 
 ## Contributors
 1. <a href="https://github.com/sanjay-kd">Sanjay Kumar </a> (Android App Dev.)
-2. <a href="">Yash Aggarwal </a> (Android App Dev.)
+2. <a href="https://github.com/yashagarwal23">Yash Agarwal </a> (Android App Dev.)
 3. <a href="https://github.com/devanshbatra04">Devansh Batra </a> (AI + Cloud)
 4. <a href="https://github.com/avinsit123">Avinash </a> (Machine Learning)
